@@ -1,6 +1,14 @@
 # MySliding
-## SlidingUtils
 
+依赖方式：
+1：maven { url = uri("https://jitpack.io") } 或 maven { url "https://jitpack.io" }
+
+2：implementation("com.github.lanweixiansen:MySliding:1.0.0")
+
+
+## 使用方式
+
+SlidingUtils
     /**
      * 添加Activity悬浮窗
      */
