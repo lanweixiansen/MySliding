@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DemoActivity">
+
+    <Button
+        android:id="@+id/home_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App悬浮窗"
+        app:layout_constraintBottom_toTopOf="@+id/home_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/home_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activity悬浮窗"
+        app:layout_constraintBottom_toTopOf="@+id/home_fragment"
+        app:layout_constraintEnd_toEndOf="@+id/home_app"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/home_app"
+        app:layout_constraintTop_toBottomOf="@+id/home_app" />
+
+    <Button
+        android:id="@+id/home_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fragment悬浮窗"
+        app:layout_constraintBottom_toTopOf="@+id/home_view"
+        app:layout_constraintEnd_toEndOf="@+id/home_activity"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/home_activity"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity" />
+
+    <Button
+        android:id="@+id/home_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="62dp"
+        android:text="View悬浮窗"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/home_fragment"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/home_fragment"
+        app:layout_constraintTop_toBottomOf="@+id/home_fragment" />
+
+    <FrameLayout
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="2dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginVertical="160dp" />
+
+    <com.example.mysliding.SlidingDemoView
+        android:id="@+id/view_sliding"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="#FFFF81D6"
+        android:visibility="gone"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="移除Fragment"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_remove_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="移除View"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_remove"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
