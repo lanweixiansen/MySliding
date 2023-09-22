@@ -3,17 +3,33 @@ package com.example.spk.sliding
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.Context.WINDOW_SERVICE
+import android.content.Intent
+import android.graphics.PixelFormat
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ContentFrameLayout
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 
+
 object SlidingUtils {
     var isShowApplicationSliding = true
 
-    private fun createdView(context: Context, view: View): SlidingSuspensionView {
-        val slidingView = SlidingSuspensionView(context).apply {
+    private fun createdView(
+        context: Context,
+        view: View,
+        windowManager: WindowManager? = null,
+        params: WindowManager.LayoutParams? = null
+    ): SlidingSuspensionView {
+        val slidingView = SlidingSuspensionView(context, windowManager, params).apply {
             addView(view)
         }
         slidingView.layoutParams = ViewGroup.LayoutParams(
@@ -63,6 +79,43 @@ object SlidingUtils {
             })
         }
     }
+
+    /**
+     * 添加系统级悬浮窗
+     * @param test 权限申请回调 参数示例: val test = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+     */
+    fun showSystemSliding(
+        activity: AppCompatActivity, view: View, test: ActivityResultLauncher<Intent>
+    ) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return
+        }
+        isShowApplicationSliding = true
+        if (!Settings.canDrawOverlays(activity)) {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:${activity.packageName}")
+            )
+            test.launch(intent)
+        } else {
+            // 已经获得了SYSTEM_ALERT_WINDOW权限，执行相关操作
+            val windowManager = activity.getSystemService(WINDOW_SERVICE) as WindowManager?
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,  // 悬浮窗类型
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,  // 不获取焦点
+                PixelFormat.TRANSLUCENT
+            )
+            // 设置悬浮窗的位置、大小、布局等属性
+            params.gravity = Gravity.TOP or Gravity.START
+            params.x = 0
+            params.y = 0
+            // 添加悬浮窗视图到窗口
+            windowManager?.addView(createdView(activity, view, windowManager, params), params)
+        }
+    }
+
 
     /**
      * 移除悬浮窗View

@@ -7,6 +7,17 @@
     tools:context=".DemoActivity">
 
     <Button
+        android:id="@+id/home_system"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="System悬浮窗"
+        app:layout_constraintBottom_toTopOf="@+id/home_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
         android:id="@+id/home_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@+id/home_activity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/home_system" />
 
     <Button
         android:id="@+id/home_activity"
@@ -54,17 +65,17 @@
         android:id="@+id/fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="2dp"
         android:layout_marginHorizontal="40dp"
-        android:layout_marginVertical="160dp" />
+        android:layout_marginVertical="160dp"
+        android:elevation="2dp" />
 
     <com.example.mysliding.SlidingDemoView
         android:id="@+id/view_sliding"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="#FFFF81D6"
-        android:visibility="gone"
         android:elevation="2dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

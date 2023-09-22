@@ -3,11 +3,14 @@ package com.example.mysliding
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.spk.sliding.SlidingUtils
 
 class DemoActivity : AppCompatActivity() {
     private var mFragment: SlidingDemoFragment? = null
+    val test =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +19,9 @@ class DemoActivity : AppCompatActivity() {
     }
 
     private fun initDemo() {
+        findViewById<Button>(R.id.home_system).setOnClickListener {
+            SlidingUtils.showSystemSliding(this, SlidingTestView(this@DemoActivity, "System"), test)
+        }
         findViewById<Button>(R.id.home_activity).setOnClickListener {
             SlidingUtils.showSliding(
                 this@DemoActivity,

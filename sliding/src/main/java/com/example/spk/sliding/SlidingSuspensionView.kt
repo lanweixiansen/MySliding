@@ -2,13 +2,12 @@ package com.example.spk.sliding
 
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
-import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.widget.LinearLayout
 import com.blankj.utilcode.util.ActivityUtils
@@ -19,13 +18,23 @@ import kotlin.math.abs
 import kotlin.math.max
 
 internal class SlidingSuspensionView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    val windowManager: WindowManager? = null,
+    val params: WindowManager.LayoutParams? = null,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
     /**
      * 判断用户是点击事件还是滑动事件
      */
     private var mOldX = 0f
     private var mOldY = 0f
+
+    /**
+     * Window.Params的坐标
+     */
+    private var mOldParamsX = 0
+    private var mOldParamsY = 0
 
     /**
      * 记录当前点击位置
@@ -67,8 +76,10 @@ internal class SlidingSuspensionView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 mOldX = ev.x
                 mOldY = ev.y
-                mMaxWidth = (parent as? ViewGroup)?.width ?: 0
-                mMaxHeight = (parent as? ViewGroup)?.height ?: 0
+                mOldParamsX = params?.x ?: 0
+                mOldParamsY = params?.y ?: 0
+                mMaxWidth = (parent as? ViewGroup)?.width ?: getScreenWidth().toInt()
+                mMaxHeight = (parent as? ViewGroup)?.height ?: getScreenHeight().toInt()
                 mOldRawX = ev.rawX
                 mOldRawY = ev.rawY
                 mOldTranslationX = this.translationX
@@ -88,15 +99,23 @@ internal class SlidingSuspensionView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {}
 
             MotionEvent.ACTION_MOVE -> {
-                checkOut {
-                    return true
+                if (windowManager != null) {
+                    params?.x = (mOldParamsX + event.rawX - mOldRawX).toInt()
+                    params?.y = (mOldParamsY + event.rawY - mOldRawY).toInt()
+                    windowManager.updateViewLayout(this, params)
+                } else {
+                    checkOut {
+                        return true
+                    }
+                    this.translationX = (event.rawX - mOldRawX + mOldTranslationX)
+                    this.translationY = (event.rawY - mOldRawY + mOldTranslationY)
                 }
-                this.translationX = (event.rawX - mOldRawX + mOldTranslationX)
-                this.translationY = (event.rawY - mOldRawY + mOldTranslationY)
             }
 
             MotionEvent.ACTION_UP -> {
-                showAnim(this.x, this.y, event.rawY)
+                if (windowManager == null) {
+                    showAnim(this.x, this.y, event.rawY)
+                }
             }
         }
         return true
@@ -177,6 +196,7 @@ internal class SlidingSuspensionView @JvmOverloads constructor(
 internal fun dp2px(dp: Float) = ConvertUtils.dp2px(dp).toFloat()
 
 internal fun getScreenHeight() = ScreenUtils.getScreenHeight().toFloat()
+internal fun getScreenWidth() = ScreenUtils.getScreenWidth().toFloat()
 
 internal fun View.toGone() {
     this.visibility = View.GONE
