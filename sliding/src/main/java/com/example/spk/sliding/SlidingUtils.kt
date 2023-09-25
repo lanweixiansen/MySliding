@@ -165,10 +165,14 @@ object SlidingUtils {
 
     private fun remove(view: View) {
         if (view.parent is SlidingSuspensionView) {
-            for (child in (view.parent.parent as ViewGroup).children) {
-                if (child is SlidingSuspensionView) {
-                    (view.parent.parent as ViewGroup).removeView(child)
+            if (view.parent.parent is ViewGroup) {
+                for (child in (view.parent.parent as ViewGroup).children) {
+                    if (child is SlidingSuspensionView) {
+                        (view.parent.parent as ViewGroup).removeView(child)
+                    }
                 }
+            } else {
+                (view.parent as SlidingSuspensionView).windowManager?.removeView(view.parent as SlidingSuspensionView)
             }
         }
     }
